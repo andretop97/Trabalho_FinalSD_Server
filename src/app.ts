@@ -4,7 +4,7 @@ import { connection } from './database/MongoDB/Connection';
 import cors from 'cors';
 
 const corsOptions = {
-  origin: '*',
+  origin: 'http://localhost:3000',
   credentials: true, //access-control-allow-credentials:true
   optionSuccessStatus: 200,
 };
