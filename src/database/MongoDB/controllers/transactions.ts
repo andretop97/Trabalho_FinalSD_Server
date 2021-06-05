@@ -2,7 +2,7 @@ import { response } from 'express';
 import { User } from '../Models/userModel';
 
 const transfer = async (req, res) => {
-  const value = parseInt(req.body.value);
+  const value = parseFloat(req.body.value);
   const recipient = await User.findOne({ ip: req.body.recipientIP }).catch(
     err => {
       console.log(err);
@@ -24,7 +24,7 @@ const transfer = async (req, res) => {
 
   await User.findOneAndUpdate(
     { ip: req.body.recipientIP },
-    { balance: recipient.balance + value },
+    { balance: parseFloat(recipient.balance) + value },
   ).catch(err => {
     console.log(err);
     return res.status(403).json({
@@ -35,7 +35,7 @@ const transfer = async (req, res) => {
 
   await User.findOneAndUpdate(
     { ip: req.body.senderIP },
-    { balance: sender.balance - value },
+    { balance: parseFloat(sender.balance) - value },
   ).catch(err => {
     console.log(err);
     return res.status(403).json({
@@ -47,11 +47,11 @@ const transfer = async (req, res) => {
   return res.status(201).json({
     sender: {
       ip: sender.ip,
-      balance: sender.balance - req.body.value,
+      balance: parseFloat(sender.balance) - value,
     },
     recipient: {
       ip: recipient.ip,
-      balance: recipient.balance + req.body.value,
+      balance: parseFloat(recipient.balance) + value,
     },
   });
 };
